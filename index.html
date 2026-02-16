@@ -2,7 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Математическая игра 2026</title>
+
 <style>
 
 /* ===== ОБЩИЙ СТИЛЬ ===== */
@@ -16,7 +18,8 @@ body{
 }
 
 h1{
-    padding:20px;
+    padding:15px;
+    font-size:22px;
     animation: glow 2s infinite alternate;
 }
 
@@ -29,11 +32,11 @@ h1{
 .icon2026{
     display:inline-block;
     background:linear-gradient(45deg,#ff0080,#ff8c00);
-    padding:15px 25px;
-    border-radius:30px;
-    font-size:22px;
-    margin-bottom:20px;
-    animation: spin 6s linear infinite;
+    padding:12px 20px;
+    border-radius:25px;
+    font-size:18px;
+    margin-bottom:15px;
+    animation: spin 8s linear infinite;
 }
 
 @keyframes spin{
@@ -43,30 +46,33 @@ h1{
 
 /* ===== КНОПКИ ===== */
 button{
-    padding:10px 20px;
-    margin:10px;
+    padding:12px;
+    margin:8px;
     border:none;
-    border-radius:10px;
+    border-radius:12px;
     cursor:pointer;
     font-size:16px;
     background:#ff9800;
     color:white;
+    width:90%;
+    max-width:350px;
     transition:0.3s;
 }
 
 button:hover{
     background:#e91e63;
-    transform:scale(1.1);
+    transform:scale(1.05);
 }
 
 /* ===== КАРТОЧКИ ===== */
 .card{
     background:rgba(255,255,255,0.1);
-    padding:20px;
-    margin:20px auto;
+    padding:15px;
+    margin:15px auto;
     border-radius:15px;
-    width:80%;
-    animation: fade 1s ease;
+    width:95%;
+    max-width:500px;
+    animation: fade 0.8s ease;
 }
 
 @keyframes fade{
@@ -75,18 +81,19 @@ button:hover{
 }
 
 img{
-    width:150px;
-    border-radius:15px;
+    width:120px;
+    border-radius:12px;
     margin:10px;
 }
 
 .hidden{ display:none; }
 
 .score{
-    font-size:20px;
+    font-size:18px;
     margin:10px;
 }
 
+/* ===== СНЕГ ===== */
 .snow{
     position:fixed;
     top:-10px;
@@ -98,12 +105,20 @@ img{
     to{ transform:translateY(100vh);}
 }
 
+/* ===== АДАПТАЦИЯ ДЛЯ БОЛЬШИХ ЭКРАНОВ ===== */
+@media(min-width:768px){
+    h1{font-size:30px;}
+    button{font-size:18px;}
+}
+
 </style>
 </head>
 <body>
 
 <h1>🎄 Математическая игра — 2026 год 🎆</h1>
 <div class="icon2026">✨ 2026 год ✨</div>
+
+<button onclick="toggleMusic()">🎵 Включить / Выключить музыку</button>
 
 <div id="menu">
     <button onclick="startGame('trig','easy')">Тригонометрия (Лёгкий)</button>
@@ -117,23 +132,22 @@ img{
     <div class="card" id="questionBox"></div>
 </div>
 
-<div class="card">
-    <h2>Великие математики</h2>
-
-    <h3>Леонард Эйлер</h3>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Leonhard_Euler.jpg">
-    <p>Развивал тригонометрию, ввёл число e и формулу e^(iπ)+1=0.</p>
-
-    <h3>Джон Непер</h3>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7d/John_Napier.jpg">
-    <p>Создатель логарифмов.</p>
-
-    <h3>Франсуа Виет</h3>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Francois_Viete.jpg">
-    <p>Основатель современной алгебры.</p>
-</div>
+<!-- 🎵 НОВОГОДНЯЯ МУЗЫКА -->
+<audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_6e4c2d71e5.mp3?filename=jingle-bells-12628.mp3" type="audio/mp3">
+</audio>
 
 <script>
+
+/* ===== МУЗЫКА ===== */
+const music = document.getElementById("bgMusic");
+function toggleMusic(){
+    if(music.paused){
+        music.play();
+    } else {
+        music.pause();
+    }
+}
 
 /* ===== СНЕГ ===== */
 function snow(){
@@ -147,31 +161,31 @@ function snow(){
 }
 setInterval(snow,200);
 
-/* ===== ВОПРОСЫ ===== */
+/* ===== ВОПРОСЫ (10 НА КАЖДУЮ ТЕМУ) ===== */
 const questions={
 trig:{
 easy:[
-{q:"sin(90°) ?",a:["0","1","-1","0.5"],c:1},
-{q:"cos(0°) ?",a:["1","0","-1","0.5"],c:0},
-{q:"tan(45°) ?",a:["1","0","-1","2"],c:0},
-{q:"sin(30°) ?",a:["0.5","1","0","2"],c:0},
-{q:"cos(60°) ?",a:["0.5","1","0","2"],c:0},
-{q:"sin(0°) ?",a:["0","1","-1","2"],c:0},
-{q:"cos(90°) ?",a:["0","1","-1","2"],c:0},
-{q:"tan(0°) ?",a:["0","1","-1","2"],c:0},
-{q:"sin(45°) ≈ ?",a:["0.7","1","0","2"],c:0},
-{q:"cos(45°) ≈ ?",a:["0.7","1","0","2"],c:0}
+{q:"sin(90°)?",a:["0","1","-1","0.5"],c:1},
+{q:"cos(0°)?",a:["1","0","-1","0.5"],c:0},
+{q:"tan(45°)?",a:["1","0","-1","2"],c:0},
+{q:"sin(30°)?",a:["0.5","1","0","2"],c:0},
+{q:"cos(60°)?",a:["0.5","1","0","2"],c:0},
+{q:"sin(0°)?",a:["0","1","-1","2"],c:0},
+{q:"cos(90°)?",a:["0","1","-1","2"],c:0},
+{q:"tan(0°)?",a:["0","1","-1","2"],c:0},
+{q:"sin(45°)≈?",a:["0.7","1","0","2"],c:0},
+{q:"cos(45°)≈?",a:["0.7","1","0","2"],c:0}
 ],
 hard:[
-{q:"sin(60°) ≈ ?",a:["0.87","1","0","2"],c:0},
-{q:"cos(30°) ≈ ?",a:["0.87","1","0","2"],c:0},
-{q:"tan(60°) ≈ ?",a:["1.73","1","0","2"],c:0},
-{q:"sin(120°) ?",a:["0.87","-0.87","1","0"],c:0},
-{q:"cos(120°) ?",a:["-0.5","0.5","1","0"],c:0},
 {q:"sin²x+cos²x=?",a:["1","0","2","x"],c:0},
-{q:"tan(30°) ≈ ?",a:["0.57","1","0","2"],c:0},
-{q:"sin(180°)?",a:["0","1","-1","2"],c:0},
 {q:"cos(180°)?",a:["-1","1","0","2"],c:0},
+{q:"sin(180°)?",a:["0","1","-1","2"],c:0},
+{q:"tan(60°)≈?",a:["1.73","1","0","2"],c:0},
+{q:"sin(60°)≈?",a:["0.87","1","0","2"],c:0},
+{q:"cos(30°)≈?",a:["0.87","1","0","2"],c:0},
+{q:"tan(30°)≈?",a:["0.57","1","0","2"],c:0},
+{q:"sin(120°)?",a:["0.87","-0.87","1","0"],c:0},
+{q:"cos(120°)?",a:["-0.5","0.5","1","0"],c:0},
 {q:"tan(90°)?",a:["не существует","0","1","-1"],c:0}
 ]
 },
@@ -203,46 +217,40 @@ hard:[
 }
 };
 
-let current=0;
-let score=0;
-let topic,level;
+let current=0,score=0,topic,level;
 
 function startGame(t,l){
-    topic=t;
-    level=l;
-    current=0;
-    score=0;
-    document.getElementById("score").innerText=score;
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("game").classList.remove("hidden");
-    showQuestion();
+topic=t; level=l; current=0; score=0;
+document.getElementById("score").innerText=score;
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
+showQuestion();
 }
 
 function showQuestion(){
-    if(current>=10){
-        document.getElementById("questionBox").innerHTML=
-        "<h2>Игра окончена!</h2><p>Ваши очки: "+score+"</p><button onclick='location.reload()'>В меню</button>";
-        return;
-    }
-    let q=questions[topic][level][current];
-    let html="<h2>"+q.q+"</h2>";
-    q.a.forEach((ans,i)=>{
-        html+=`<button onclick="check(${i})">${ans}</button><br>`;
-    });
-    document.getElementById("questionBox").innerHTML=html;
+if(current>=10){
+document.getElementById("questionBox").innerHTML=
+"<h2>Игра окончена 🎉</h2><p>Ваши очки: "+score+"</p><button onclick='location.reload()'>В меню</button>";
+return;
+}
+let q=questions[topic][level][current];
+let html="<h3>"+q.q+"</h3>";
+q.a.forEach((ans,i)=>{
+html+=`<button onclick="check(${i})">${ans}</button>`;
+});
+document.getElementById("questionBox").innerHTML=html;
 }
 
 function check(i){
-    let q=questions[topic][level][current];
-    if(i===q.c){
-        score+=10;
-        document.getElementById("score").innerText=score;
-    }
-    current++;
-    showQuestion();
+let q=questions[topic][level][current];
+if(i===q.c){score+=10;}
+document.getElementById("score").innerText=score;
+current++;
+showQuestion();
 }
 
 </script>
 
 </body>
 </html>
+
