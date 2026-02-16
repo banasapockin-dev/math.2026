@@ -1,129 +1,183 @@
-// ====== Показ разделов ======
-function showSection(id) {
-    document.querySelectorAll('.section').forEach(sec => {
-        sec.style.display = "none";
-    });
-    document.getElementById(id).style.display = "block";
+/* =========================
+   НОВОГОДНЯЯ МУЗЫКА
+========================= */
+const music = document.getElementById("bgMusic");
+
+function toggleMusic() {
+    if (!music) return;
+    music.paused ? music.play() : music.pause();
 }
 
-// ====== Система очков ======
-let score = 0;
-
-function updateScore() {
-    let scoreBox = document.getElementById("score");
-    if (scoreBox) {
-        scoreBox.innerText = "🏆 Очки: " + score;
-    }
-}
-
-// ====== ТРИГОНОМЕТРИЯ ======
-function trigEasy() {
-    const questions = [
-        { q: "sin(90°) = ?", a: 1 },
-        { q: "cos(0°) = ?", a: 1 },
-        { q: "tan(45°) = ?", a: 1 }
-    ];
-    generateQuestion("trig", questions);
-}
-
-function trigHard() {
-    const questions = [
-        { q: "cos(60°) = ?", a: 0.5 },
-        { q: "sin(30°) = ?", a: 0.5 },
-        { q: "tan(60°) ≈ ?", a: 1.73 }
-    ];
-    generateQuestion("trig", questions);
-}
-
-// ====== ЛОГАРИФМЫ ======
-function logEasy() {
-    const questions = [
-        { q: "log₁₀(100) = ?", a: 2 },
-        { q: "log₁₀(1000) = ?", a: 3 },
-        { q: "log₂(4) = ?", a: 2 }
-    ];
-    generateQuestion("log", questions);
-}
-
-function logHard() {
-    const questions = [
-        { q: "log₂(8) = ?", a: 3 },
-        { q: "log₃(9) = ?", a: 2 },
-        { q: "log₅(25) = ?", a: 2 }
-    ];
-    generateQuestion("log", questions);
-}
-
-// ====== Генерация вопросов ======
-function generateQuestion(type, questions) {
-    const random = questions[Math.floor(Math.random() * questions.length)];
-    const container = document.getElementById(type + "Question");
-    const resultBox = document.getElementById(type + "Result");
-
-    container.innerHTML = `
-        <p>${random.q}</p>
-        <input id="${type}Ans" type="number" step="any">
-        <button onclick="checkAnswer('${type}', ${random.a})">Ответ</button>
-    `;
-
-    resultBox.innerHTML = "";
-}
-
-// ====== Проверка ответа ======
-function checkAnswer(type, correct) {
-    const ans = parseFloat(document.getElementById(type + "Ans").value);
-    const resultBox = document.getElementById(type + "Result");
-
-    if (Math.abs(ans - correct) < 0.01) {
-        resultBox.innerHTML = "✅ Верно! +10 очков";
-        resultBox.style.color = "lightgreen";
-        score += 10;
-    } else {
-        resultBox.innerHTML = "❌ Неверно! Попробуй ещё";
-        resultBox.style.color = "red";
-    }
-
-    updateScore();
-}
-
-// ====== Новогодний снег ======
-function createSnowflake() {
+/* =========================
+   СНЕГ
+========================= */
+function createSnow() {
     const snow = document.createElement("div");
-    snow.classList.add("snowflake");
+    snow.className = "snow";
     snow.innerHTML = "❄";
     snow.style.left = Math.random() * window.innerWidth + "px";
     snow.style.animationDuration = (Math.random() * 3 + 2) + "s";
     document.body.appendChild(snow);
+    setTimeout(() => snow.remove(), 5000);
+}
+setInterval(createSnow, 200);
 
-    setTimeout(() => {
-        snow.remove();
-    }, 5000);
+/* =========================
+   БАЗА ВОПРОСОВ
+========================= */
+const questions = {
+    trig: {
+        easy: [
+            {q:"sin(90°)?", a:["0","1","-1","0.5"], c:1},
+            {q:"cos(0°)?", a:["1","0","-1","0.5"], c:0},
+            {q:"tan(45°)?", a:["1","0","-1","2"], c:0},
+            {q:"sin(30°)?", a:["0.5","1","0","2"], c:0},
+            {q:"cos(60°)?", a:["0.5","1","0","2"], c:0},
+            {q:"sin(0°)?", a:["0","1","-1","2"], c:0},
+            {q:"cos(90°)?", a:["0","1","-1","2"], c:0},
+            {q:"tan(0°)?", a:["0","1","-1","2"], c:0},
+            {q:"sin²x+cos²x?", a:["1","0","2","x"], c:0},
+            {q:"sin(45°)≈?", a:["0.7","1","0","2"], c:0}
+        ],
+        hard: [
+            {q:"cos(180°)?", a:["-1","1","0","2"], c:0},
+            {q:"sin(180°)?", a:["0","1","-1","2"], c:0},
+            {q:"tan(60°)≈?", a:["1.73","1","0","2"], c:0},
+            {q:"sin(60°)≈?", a:["0.87","1","0","2"], c:0},
+            {q:"cos(30°)≈?", a:["0.87","1","0","2"], c:0},
+            {q:"tan(30°)≈?", a:["0.57","1","0","2"], c:0},
+            {q:"sin(120°)?", a:["0.87","-0.87","1","0"], c:0},
+            {q:"cos(120°)?", a:["-0.5","0.5","1","0"], c:0},
+            {q:"tan(90°)?", a:["не существует","0","1","-1"], c:0},
+            {q:"sec(0°)?", a:["1","0","-1","2"], c:0}
+        ]
+    },
+    log: {
+        easy: [
+            {q:"log₁₀(100)?", a:["2","1","0","3"], c:0},
+            {q:"log₂(4)?", a:["2","1","0","3"], c:0},
+            {q:"log₁₀(1000)?", a:["3","1","0","2"], c:0},
+            {q:"log₃(9)?", a:["2","1","0","3"], c:0},
+            {q:"log₅(25)?", a:["2","1","0","3"], c:0},
+            {q:"log₂(8)?", a:["3","1","0","2"], c:0},
+            {q:"log₁₀(10)?", a:["1","2","0","3"], c:0},
+            {q:"log₄(16)?", a:["2","1","0","3"], c:0},
+            {q:"log₁₀(1)?", a:["0","1","2","3"], c:0},
+            {q:"log₂(1)?", a:["0","1","2","3"], c:0}
+        ],
+        hard: [
+            {q:"log₂(32)?", a:["5","4","3","2"], c:0},
+            {q:"log₃(27)?", a:["3","2","1","4"], c:0},
+            {q:"log₅(125)?", a:["3","2","1","4"], c:0},
+            {q:"log₇(49)?", a:["2","1","3","4"], c:0},
+            {q:"log₄(64)?", a:["3","2","1","4"], c:0},
+            {q:"log₁₀(0.1)?", a:["-1","1","0","2"], c:0},
+            {q:"log₂(0.5)?", a:["-1","1","0","2"], c:0},
+            {q:"log₁₀(10000)?", a:["4","3","2","1"], c:0},
+            {q:"log₃(1)?", a:["0","1","2","3"], c:0},
+            {q:"log₂(16)?", a:["4","3","2","5"], c:0}
+        ]
+    }
+};
+
+/* =========================
+   ИГРОВАЯ ЛОГИКА
+========================= */
+let topic, level;
+let current = 0;
+let score = 0;
+let timer;
+let timeLeft = 15;
+
+function startGame(t, l) {
+    topic = t;
+    level = l;
+    current = 0;
+    score = 0;
+    document.getElementById("score").innerText = score;
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+    showQuestion();
 }
 
-setInterval(createSnowflake, 200);
+function showQuestion() {
+    if (current >= 10) {
+        endGame();
+        return;
+    }
 
-// ====== Новогодний фейерверк при 50 очках ======
-function checkWinner() {
-    if (score >= 50) {
-        alert("🎆 Поздравляем! Вы мастер математики 2026 года! 🎄");
-        score = 0;
-        updateScore();
+    const q = questions[topic][level][current];
+    let html = `<h3>${q.q}</h3><div id="timer">⏳ 15</div>`;
+
+    q.a.forEach((ans, i) => {
+        html += `<button onclick="checkAnswer(${i})">${ans}</button>`;
+    });
+
+    document.getElementById("questionBox").innerHTML = html;
+    startTimer();
+}
+
+function checkAnswer(index) {
+    const q = questions[topic][level][current];
+    if (index === q.c) {
+        score += 10;
+        document.getElementById("score").innerText = score;
+    }
+    clearInterval(timer);
+    current++;
+    showQuestion();
+}
+
+function startTimer() {
+    timeLeft = 15;
+    timer = setInterval(() => {
+        timeLeft--;
+        const timerBox = document.getElementById("timer");
+        if (timerBox) timerBox.innerText = "⏳ " + timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            current++;
+            showQuestion();
+        }
+    }, 1000);
+}
+
+function endGame() {
+    let message = `<h2>🎉 Игра окончена!</h2>
+                   <p>Ваши очки: ${score}</p>`;
+
+    if (score === 100) {
+        message += "<h3>🏆 Вы мастер математики 2026 года!</h3>";
+        firework();
+    }
+
+    message += `<button onclick="location.reload()">В меню</button>`;
+    document.getElementById("questionBox").innerHTML = message;
+}
+
+/* =========================
+   ФЕЙЕРВЕРК
+========================= */
+function firework() {
+    for (let i = 0; i < 30; i++) {
+        const spark = document.createElement("div");
+        spark.style.position = "fixed";
+        spark.style.width = "6px";
+        spark.style.height = "6px";
+        spark.style.background = "yellow";
+        spark.style.borderRadius = "50%";
+        spark.style.left = window.innerWidth/2 + "px";
+        spark.style.top = window.innerHeight/2 + "px";
+        spark.style.transition = "1s";
+        document.body.appendChild(spark);
+
+        setTimeout(() => {
+            spark.style.left = Math.random() * window.innerWidth + "px";
+            spark.style.top = Math.random() * window.innerHeight + "px";
+            spark.style.opacity = 0;
+        }, 10);
+
+        setTimeout(() => spark.remove(), 1000);
     }
 }
-
-// Проверка победы каждые 2 секунды
-setInterval(checkWinner, 2000);
-
-// ====== Инициализация ======
-document.addEventListener("DOMContentLoaded", () => {
-    const header = document.querySelector("header");
-
-    // Добавляем табло очков
-    const scoreDiv = document.createElement("div");
-    scoreDiv.id = "score";
-    scoreDiv.style.marginTop = "10px";
-    scoreDiv.style.fontSize = "20px";
-    header.appendChild(scoreDiv);
-
-    updateScore();
-});
