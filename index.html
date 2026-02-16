@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Математическая Игра 2026</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+header {
+    padding: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #fff; }
+    to { text-shadow: 0 0 25px #00ffff; }
+}
+
+.menu button {
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #ff9800;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu button:hover {
+    background: #ff5722;
+    transform: scale(1.1);
+}
+
+.section {
+    display: none;
+    padding: 20px;
+}
+
+.icon2026 {
+    font-size: 30px;
+    background: #e91e63;
+    padding: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 20px;
+    animation: spin 6s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.snowflake {
+    position: fixed;
+    top: -10px;
+    color: white;
+    font-size: 18px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+    }
+}
+
+input {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+}
+
+.result {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.card {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 15px;
+    margin: 10px auto;
+    width: 70%;
+}
+</style>
+</head>
+<body>
+
+<header>🎄 Математическая Игра — 2026 год в новогоднем стиле 🎆</header>
+
+<div class="icon2026">🎆 2026 🎄</div>
+
+<div class="menu">
+    <button onclick="showSection('trig')">Тригонометрия</button>
+    <button onclick="showSection('log')">Логарифмы</button>
+    <button onclick="showSection('math')">Математики</button>
+</div>
+
+<div id="trig" class="section">
+    <h2>📐 Уровни тригонометрии</h2>
+    <button onclick="trigEasy()">Лёгкий</button>
+    <button onclick="trigHard()">Сложный</button>
+    <div id="trigQuestion"></div>
+    <div class="result" id="trigResult"></div>
+</div>
+
+<div id="log" class="section">
+    <h2>📊 Уровни логарифмов</h2>
+    <button onclick="logEasy()">Лёгкий</button>
+    <button onclick="logHard()">Сложный</button>
+    <div id="logQuestion"></div>
+    <div class="result" id="logResult"></div>
+</div>
+
+<div id="math" class="section">
+    <h2>👨‍🏫 Великие математики</h2>
+    <div class="card">
+        <h3>Леонард Эйлер</h3>
+        <p>Развивал тригонометрию и логарифмы. Ввел число e и формулу e^(iπ) + 1 = 0.</p>
+    </div>
+    <div class="card">
+        <h3>Джон Непер</h3>
+        <p>Создатель логарифмов, упростил вычисления до появления калькуляторов.</p>
+    </div>
+    <div class="card">
+        <h3>Франсуа Виет</h3>
+        <p>Один из основателей современной алгебры и тригонометрии.</p>
+    </div>
+</div>
+
+<script>
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.style.display = "none");
+    document.getElementById(id).style.display = "block";
+}
+
+function trigEasy() {
+    document.getElementById("trigQuestion").innerHTML =
+        "sin(90°) = ? <br><input id='trigAns'><button onclick='checkTrig(1)'>Ответ</button>";
+}
+
+function trigHard() {
+    document.getElementById("trigQuestion").innerHTML =
+        "cos(60°) = ? <br><input id='trigAns'><button onclick='checkTrig(0.5)'>Ответ</button>";
+}
+
+function checkTrig(correct) {
+    let ans = parseFloat(document.getElementById("trigAns").value);
+    document.getElementById("trigResult").innerHTML =
+        ans === correct ? "✅ Верно!" : "❌ Попробуй ещё!";
+}
+
+function logEasy() {
+    document.getElementById("logQuestion").innerHTML =
+        "log₁₀(100) = ? <br><input id='logAns'><button onclick='checkLog(2)'>Ответ</button>";
+}
+
+function logHard() {
+    document.getElementById("logQuestion").innerHTML =
+        "log₂(8) = ? <br><input id='logAns'><button onclick='checkLog(3)'>Ответ</button>";
+}
+
+function checkLog(correct) {
+    let ans = parseFloat(document.getElementById("logAns").value);
+    document.getElementById("logResult").innerHTML =
+        ans === correct ? "✅ Верно!" : "❌ Попробуй ещё!";
+}
+
+function createSnowflake() {
+    const snow = document.createElement("div");
+    snow.classList.add("snowflake");
+    snow.innerHTML = "❄";
+    snow.style.left = Math.random() * window.innerWidth + "px";
+    snow.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    document.body.appendChild(snow);
+    setTimeout(() => snow.remove(), 5000);
+}
+
+setInterval(createSnowflake, 200);
+</script>
+
+</body>
+</html>
